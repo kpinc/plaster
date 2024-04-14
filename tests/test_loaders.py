@@ -141,36 +141,40 @@ class Test_get_sections:
             self._callFUT("development.bad")
 
 
+@pytest.mark.parametrize("raw", [False, True])
 @pytest.mark.usefixtures("fake_packages")
 class Test_get_settings:
-    def _callFUT(self, config_uri, section=None, defaults=None):
+    def _callFUT(self, config_uri, section=None, defaults=None, *, raw=False):
         from plaster.loaders import get_settings
 
-        return get_settings(config_uri, section=section, defaults=defaults)
+        return get_settings(config_uri, section=section, defaults=defaults, raw=raw)
 
-    def test_it_explicit_a(self):
-        result = self._callFUT("development.ini", "a")
+    def test_it_explicit_a(self, raw):
+        result = self._callFUT("development.ini", "a", raw=raw)
         assert result == {"foo": "bar"}
 
-    def test_it_explicit_b(self):
-        result = self._callFUT("development.ini", "b")
+    def test_it_explicit_b(self, raw):
+        result = self._callFUT("development.ini", "b", raw=raw)
         assert result == {"baz": "xyz"}
 
-    def test_it_fragment(self):
-        result = self._callFUT("development.ini#a")
+    def test_it_fragment(self, raw):
+        result = self._callFUT("development.ini#a", raw=raw)
         assert result == {"foo": "bar"}
 
-    def test_defaults(self):
-        result = self._callFUT("development.ini", "a", {"baz": "foo"})
-        assert result == {"foo": "bar", "baz": "foo"}
+    def test_defaults(self, raw):
+        result = self._callFUT("development.ini", "a", {"baz": "foo"}, raw=raw)
+        if raw:
+            assert result == {"foo": "bar"}
+        else:
+            assert result == {"foo": "bar", "baz": "foo"}
 
-    def test_invalid_section(self):
-        result = self._callFUT("development.ini", "c")
+    def test_invalid_section(self, raw):
+        result = self._callFUT("development.ini", "c", raw=raw)
         assert result == {}
 
-    def test_it_bad(self):
+    def test_it_bad(self, raw):
         with pytest.raises(Exception):
-            self._callFUT("development.bad")
+            self._callFUT("development.bad", raw=raw)
 
 
 @pytest.mark.usefixtures("fake_packages")

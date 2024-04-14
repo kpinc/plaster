@@ -29,7 +29,7 @@ class ILoader(metaclass=abc.ABCMeta):
         """
 
     @abc.abstractmethod
-    def get_settings(self, section=None, defaults=None):
+    def get_settings(self, section=None, defaults=None, *, raw=False):
         """
         Load the settings for the named ``section``.
 
@@ -42,6 +42,9 @@ class ILoader(metaclass=abc.ABCMeta):
             settings and support variable interpolation. Any values in
             ``defaults`` may be overridden by the loader prior to returning
             the final configuration dictionary.
+
+        :param raw: when not True, return the section without interpolation,
+            application of defaults, or other alteration.
 
         :returns: A ``dict`` of settings. This should return a dictionary
             object even if the section is missing.

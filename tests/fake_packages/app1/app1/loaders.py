@@ -13,10 +13,10 @@ class LoaderBase(plaster.ILoader):
     def get_sections(self):
         return list(_SECTIONS.keys())
 
-    def get_settings(self, section=None, defaults=None):
+    def get_settings(self, section=None, defaults=None, *, raw=False):
         if section is None:
             section = self.uri.fragment
-        if defaults is not None:
+        if defaults is not None and not raw:
             result = defaults.copy()
         else:
             result = {}

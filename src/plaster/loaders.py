@@ -31,7 +31,7 @@ def get_sections(config_uri):
     return loader.get_sections()
 
 
-def get_settings(config_uri, section=None, defaults=None):
+def get_settings(config_uri, section=None, defaults=None, *, raw=False):
     """
     Load the settings from a named section.
 
@@ -53,13 +53,16 @@ def get_settings(config_uri, section=None, defaults=None):
         may be overridden by the loader prior to returning the final
         configuration dictionary.
 
+    :param raw: when not True, return the section without interpolation,
+        application of defaults, or other alteration.
+
     :returns: A ``dict`` of settings. This should return a dictionary object
         even if no data is available.
 
     """
     loader = get_loader(config_uri)
 
-    return loader.get_settings(section, defaults)
+    return loader.get_settings(section, defaults, raw=raw)
 
 
 def setup_logging(config_uri, defaults=None):
