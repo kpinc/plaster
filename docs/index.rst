@@ -176,7 +176,7 @@ If the loader should be found automatically via file extension then it should br
         def get_sections(self):
             return ['myapp', 'yourapp']
 
-        def get_settings(self, section=None, defaults=None):
+        def get_settings(self, section=None, defaults=None, raw=False):
             # fallback to the fragment from config_uri if no section is given
             if not section:
                 section = self.uri.fragment
@@ -184,7 +184,7 @@ If the loader should be found automatically via file extension then it should br
             # loader-specific default
 
             result = {}
-            if defaults is not None:
+            if not raw and defaults is not None:
                 result.update(defaults)
             if section == 'myapp':
                 result.update({'a': 1})
